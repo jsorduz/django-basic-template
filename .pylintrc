@@ -152,6 +152,7 @@ disable=line-too-long,
         no-member,
         # Docstrings
         C0114,C0115,C0116,
+        R0901,
         W1508,
         # raw-checker-failed,
         # bad-inline-option,

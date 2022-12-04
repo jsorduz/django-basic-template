@@ -10,5 +10,4 @@ then
     python -m pylint $(echo $apps)
 fi
 
-python -m coverage run --source='.' manage.py test $(echo $apps)
-python -m coverage report
+python -m pytest --cov

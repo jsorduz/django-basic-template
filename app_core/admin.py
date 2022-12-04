@@ -6,7 +6,7 @@ from app_core.models import CustomUser
 
 
 class CustomUserAdmin(UserAdmin):
-    fieldsets = (
+    fieldsets = (  # type: ignore
         (None, {"fields": ("email", "password")}),
         (
             _("Permissions"),
