@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
+from datetime import timedelta
 from pathlib import Path
 
 from django.core.management.utils import get_random_secret_key
@@ -41,6 +42,8 @@ INSTALLED_APPS = (
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # third party apps
+    "rest_framework",
     # project apps
     "app_core",
 )
@@ -167,6 +170,31 @@ LOGGING = {  # noqa: WPS407
         "handlers": ["console"],
         "level": "INFO",
     },
+}
+
+# RestFramework
+# https://www.django-rest-framework.org/
+REST_FRAMEWORK = {  # noqa: WPS407
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticated",
+        "common.permissions.CustomDjangoModelPermission",
+    ),
+    "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": os.getenv("REST_FRAMEWORK_PAGE_SIZE", default=20),
+}
+
+# SimpleJWT
+# https://github.com/jazzband/djangorestframework-simplejwt
+access_token_lifetime = os.getenv("ACCESS_TOKEN_LIFETIME_MINUTES", 30)
+refresh_token_lifetime = os.getenv("REFRESH_TOKEN_LIFETIME_DAYS", 30)
+SIMPLE_JWT = {  # noqa: WPS407
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=float(access_token_lifetime)),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=float(refresh_token_lifetime)),
 }
 
 # Initial Superuser
