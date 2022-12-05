@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # third party apps
+    "django_celery_beat",
     "rest_framework",
     # project apps
     "app_core",
@@ -196,6 +197,18 @@ SIMPLE_JWT = {  # noqa: WPS407
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=float(access_token_lifetime)),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=float(refresh_token_lifetime)),
 }
+
+# CELERY
+# https://docs.celeryq.dev/en/stable/getting-started/introduction.html
+CELERY_BROKER_URL = os.getenv("REDIS_URL", "redis://127.0.0.1:6379/0")
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
+# CELERY BEAT
+# https://django-celery-beat.readthedocs.io/en/latest/
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+DJANGO_CELERY_BEAT_TZ_AWARE = USE_TZ
 
 # Initial Superuser
 SUPERUSER_EMAIL = os.getenv("SUPERUSER_EMAIL")
